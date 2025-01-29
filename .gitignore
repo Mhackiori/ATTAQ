@@ -1,0 +1,8 @@
+bkp/
+__pycache__/
+*.pt
+cifar-10-batches-py/
+MNIST/
+FashionMNIST/
+CIFAR10/
+*.tar.gz
