@@ -32,7 +32,6 @@ datasets = [
         root="./datasets",
         train_valid_split_ratio=[0.9, 0.1],
         digits_of_interest=[3, 5],
-        # resize = 28,
         center_crop = 28,
         grayscale=True
     )
@@ -75,8 +74,25 @@ epsilons = [
 ]
 
 attack_names = [
+    'APGD',
     'BIM',
+    'DIFGSM',
+    'FAB',
+    'EOTPGD',
+    'FFGSM',
     'FGSM',
+    'Jitter',
+    'MIFGSM',
+    'NIFGSM',
     'PGD',
-    'RFGSM'
+    'PGDRS',
+    'PGDL2',
+    'PGDRSL2',
+    'RFGSM',
+    'SINIFGSM',
+    'SPSA',
+    'TPGD',
+    'UPGD',
+    'VMIFGSM',
+    'VNIFGSM'
 ]

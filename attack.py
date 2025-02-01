@@ -92,10 +92,27 @@ for dataset, dataset_name in zip(datasets, dataset_names):
         os.makedirs(f'./attack/{dataset_name}', exist_ok=True)
         for epsilon in epsilons:
             attacks = [
+                torchattacks.APGD(qfc, eps=epsilon),
                 torchattacks.BIM(qfc, eps=epsilon),
+                torchattacks.DIFGSM(qfc, eps=epsilon),
+                torchattacks.FAB(qfc, eps=epsilon),
+                torchattacks.EOTPGD(qfc, eps=epsilon),
+                torchattacks.FFGSM(qfc, eps=epsilon),
                 torchattacks.FGSM(qfc, eps=epsilon),
+                torchattacks.Jitter(qfc, eps=epsilon),
+                torchattacks.MIFGSM(qfc, eps=epsilon),
+                torchattacks.NIFGSM(qfc, eps=epsilon),
                 torchattacks.PGD(qfc, eps=epsilon),
+                torchattacks.PGDRS(qfc, eps=epsilon),
+                torchattacks.PGDL2(qfc, eps=epsilon),
+                torchattacks.PGDRSL2(qfc, eps=epsilon),
                 torchattacks.RFGSM(qfc, eps=epsilon),
+                torchattacks.SINIFGSM(qfc, eps=epsilon),
+                torchattacks.SPSA(qfc, eps=epsilon),
+                torchattacks.TPGD(qfc, eps=epsilon),
+                torchattacks.UPGD(qfc, eps=epsilon),
+                torchattacks.VMIFGSM(qfc, eps=epsilon),
+                torchattacks.VNIFGSM(qfc, eps=epsilon)
             ]
 
             for attack, attack_name in zip(attacks, attack_names):
@@ -124,10 +141,27 @@ for dataset, dataset_name in zip(datasets, dataset_names):
         # Generating attacks
         for epsilon in epsilons:
             attacks = [
+                torchattacks.APGD(cfc, eps=epsilon),
                 torchattacks.BIM(cfc, eps=epsilon),
+                torchattacks.DIFGSM(cfc, eps=epsilon),
+                torchattacks.FAB(cfc, eps=epsilon),
+                torchattacks.EOTPGD(cfc, eps=epsilon),
+                torchattacks.FFGSM(cfc, eps=epsilon),
                 torchattacks.FGSM(cfc, eps=epsilon),
+                torchattacks.Jitter(cfc, eps=epsilon),
+                torchattacks.MIFGSM(cfc, eps=epsilon),
+                torchattacks.NIFGSM(cfc, eps=epsilon),
                 torchattacks.PGD(cfc, eps=epsilon),
+                torchattacks.PGDRS(cfc, eps=epsilon),
+                torchattacks.PGDL2(cfc, eps=epsilon),
+                torchattacks.PGDRSL2(cfc, eps=epsilon),
                 torchattacks.RFGSM(cfc, eps=epsilon),
+                torchattacks.SINIFGSM(cfc, eps=epsilon),
+                torchattacks.SPSA(cfc, eps=epsilon),
+                torchattacks.TPGD(cfc, eps=epsilon),
+                torchattacks.UPGD(cfc, eps=epsilon),
+                torchattacks.VMIFGSM(cfc, eps=epsilon),
+                torchattacks.VNIFGSM(cfc, eps=epsilon)
             ]
 
             for attack, attack_name in zip(attacks, attack_names):
@@ -226,7 +260,7 @@ for dataset, dataset_name in zip(datasets, dataset_names):
                     accuracy = correct / total
                     f1 = f1_score(all_labels.cpu(), predicted.cpu(), average='weighted')
 
-                    print(f'[⚔️ CFC VS. {target_model_name} {attack_name} @ {epsilon}] {accuracy:.3f}')
+                    print(f'\t[⚔️ CFC VS. {target_model_name} {attack_name} @ {epsilon}] {accuracy:.3f}')
 
                     results_df.append({
                         'Target_Model': target_model_name,

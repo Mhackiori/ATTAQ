@@ -67,10 +67,27 @@ for dataset, dataset_name in zip(datasets, dataset_names):
                 epoch_eps = (epoch/n_epochs)
 
                 attacks = [
+                    torchattacks.APGD(qfc, eps=epoch_eps),
                     torchattacks.BIM(qfc, eps=epoch_eps),
+                    torchattacks.DIFGSM(qfc, eps=epoch_eps),
+                    torchattacks.FAB(qfc, eps=epoch_eps),
+                    torchattacks.EOTPGD(qfc, eps=epoch_eps),
+                    torchattacks.FFGSM(qfc, eps=epoch_eps),
                     torchattacks.FGSM(qfc, eps=epoch_eps),
+                    torchattacks.Jitter(qfc, eps=epoch_eps),
+                    torchattacks.MIFGSM(qfc, eps=epoch_eps),
+                    torchattacks.NIFGSM(qfc, eps=epoch_eps),
                     torchattacks.PGD(qfc, eps=epoch_eps),
+                    torchattacks.PGDRS(qfc, eps=epoch_eps),
+                    torchattacks.PGDL2(qfc, eps=epoch_eps),
+                    torchattacks.PGDRSL2(qfc, eps=epoch_eps),
                     torchattacks.RFGSM(qfc, eps=epoch_eps),
+                    torchattacks.SINIFGSM(qfc, eps=epoch_eps),
+                    torchattacks.SPSA(qfc, eps=epoch_eps),
+                    torchattacks.TPGD(qfc, eps=epoch_eps),
+                    torchattacks.UPGD(qfc, eps=epoch_eps),
+                    torchattacks.VMIFGSM(qfc, eps=epoch_eps),
+                    torchattacks.VNIFGSM(qfc, eps=epoch_eps)
                 ]
 
                 for attack in attacks:
@@ -118,10 +135,27 @@ for dataset, dataset_name in zip(datasets, dataset_names):
                 epoch_eps = (epoch/n_epochs)
 
                 attacks = [
+                    torchattacks.APGD(cfc, eps=epoch_eps),
                     torchattacks.BIM(cfc, eps=epoch_eps),
+                    torchattacks.DIFGSM(cfc, eps=epoch_eps),
+                    torchattacks.FAB(cfc, eps=epoch_eps),
+                    torchattacks.EOTPGD(cfc, eps=epoch_eps),
+                    torchattacks.FFGSM(cfc, eps=epoch_eps),
                     torchattacks.FGSM(cfc, eps=epoch_eps),
+                    torchattacks.Jitter(cfc, eps=epoch_eps),
+                    torchattacks.MIFGSM(cfc, eps=epoch_eps),
+                    torchattacks.NIFGSM(cfc, eps=epoch_eps),
                     torchattacks.PGD(cfc, eps=epoch_eps),
+                    torchattacks.PGDRS(cfc, eps=epoch_eps),
+                    torchattacks.PGDL2(cfc, eps=epoch_eps),
+                    torchattacks.PGDRSL2(cfc, eps=epoch_eps),
                     torchattacks.RFGSM(cfc, eps=epoch_eps),
+                    torchattacks.SINIFGSM(cfc, eps=epoch_eps),
+                    torchattacks.SPSA(cfc, eps=epoch_eps),
+                    torchattacks.TPGD(cfc, eps=epoch_eps),
+                    torchattacks.UPGD(cfc, eps=epoch_eps),
+                    torchattacks.VMIFGSM(cfc, eps=epoch_eps),
+                    torchattacks.VNIFGSM(cfc, eps=epoch_eps)
                 ]
 
                 for attack in attacks:
@@ -184,14 +218,48 @@ for dataset, dataset_name in zip(datasets, dataset_names):
                 epoch_eps = (epoch/n_epochs)
 
                 attacks = [
+                    torchattacks.APGD(qfc, eps=epoch_eps),
                     torchattacks.BIM(qfc, eps=epoch_eps),
+                    torchattacks.DIFGSM(qfc, eps=epoch_eps),
+                    torchattacks.FAB(qfc, eps=epoch_eps),
+                    torchattacks.EOTPGD(qfc, eps=epoch_eps),
+                    torchattacks.FFGSM(qfc, eps=epoch_eps),
                     torchattacks.FGSM(qfc, eps=epoch_eps),
+                    torchattacks.Jitter(qfc, eps=epoch_eps),
+                    torchattacks.MIFGSM(qfc, eps=epoch_eps),
+                    torchattacks.NIFGSM(qfc, eps=epoch_eps),
                     torchattacks.PGD(qfc, eps=epoch_eps),
+                    torchattacks.PGDRS(qfc, eps=epoch_eps),
+                    torchattacks.PGDL2(qfc, eps=epoch_eps),
+                    torchattacks.PGDRSL2(qfc, eps=epoch_eps),
                     torchattacks.RFGSM(qfc, eps=epoch_eps),
+                    torchattacks.SINIFGSM(qfc, eps=epoch_eps),
+                    torchattacks.SPSA(qfc, eps=epoch_eps),
+                    torchattacks.TPGD(qfc, eps=epoch_eps),
+                    torchattacks.UPGD(qfc, eps=epoch_eps),
+                    torchattacks.VMIFGSM(qfc, eps=epoch_eps),
+                    torchattacks.VNIFGSM(qfc, eps=epoch_eps),
+                    torchattacks.APGD(cfc, eps=epoch_eps),
                     torchattacks.BIM(cfc, eps=epoch_eps),
+                    torchattacks.DIFGSM(cfc, eps=epoch_eps),
+                    torchattacks.FAB(cfc, eps=epoch_eps),
+                    torchattacks.EOTPGD(cfc, eps=epoch_eps),
+                    torchattacks.FFGSM(cfc, eps=epoch_eps),
                     torchattacks.FGSM(cfc, eps=epoch_eps),
+                    torchattacks.Jitter(cfc, eps=epoch_eps),
+                    torchattacks.MIFGSM(cfc, eps=epoch_eps),
+                    torchattacks.NIFGSM(cfc, eps=epoch_eps),
                     torchattacks.PGD(cfc, eps=epoch_eps),
+                    torchattacks.PGDRS(cfc, eps=epoch_eps),
+                    torchattacks.PGDL2(cfc, eps=epoch_eps),
+                    torchattacks.PGDRSL2(cfc, eps=epoch_eps),
                     torchattacks.RFGSM(cfc, eps=epoch_eps),
+                    torchattacks.SINIFGSM(cfc, eps=epoch_eps),
+                    torchattacks.SPSA(cfc, eps=epoch_eps),
+                    torchattacks.TPGD(cfc, eps=epoch_eps),
+                    torchattacks.UPGD(cfc, eps=epoch_eps),
+                    torchattacks.VMIFGSM(cfc, eps=epoch_eps),
+                    torchattacks.VNIFGSM(cfc, eps=epoch_eps)
                 ]
 
                 for attack in attacks:
@@ -200,12 +268,12 @@ for dataset, dataset_name in zip(datasets, dataset_names):
                     c_adv_outputs = cfc(adv_inputs)
 
                     q_adv_loss = F.nll_loss(q_adv_outputs, targets)
-                    c_adv_loss = F.nll_loss(c_adv_outputs, targets)
                     q_optimizer.zero_grad()
-                    c_optimizer.zero_grad()
-                    q_adv_loss.backward()
-                    c_adv_loss.backward()
+                    q_adv_loss.backward(retain_graph=True)
                     q_optimizer.step()
+                    c_adv_loss = F.nll_loss(c_adv_outputs, targets)
+                    c_optimizer.zero_grad()
+                    c_adv_loss.backward(retain_graph=True)
                     c_optimizer.step()
 
             # Validation

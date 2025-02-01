@@ -6,3 +6,4 @@ MNIST/
 FashionMNIST/
 CIFAR10/
 *.tar.gz
+figures/
