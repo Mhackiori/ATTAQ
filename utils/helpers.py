@@ -41,9 +41,10 @@ def train(dataflow, model, device, optimizer):
     return loss
 
 
-def test(dataflow, split, model, device, qiskit=False):
+def test(dataflow, split, model, device, qiskit=False, extract_predicted=False):
     target_all = []
     output_all = []
+    predicted_all = []
     with torch.no_grad():
         for feed_dict in dataflow[split]:
             inputs = feed_dict["image"].to(device)
@@ -53,6 +54,10 @@ def test(dataflow, split, model, device, qiskit=False):
 
             target_all.append(targets)
             output_all.append(outputs)
+
+            _, predicted = torch.max(outputs.data, 1)
+            predicted_all.append(predicted) 
+
         target_all = torch.cat(target_all, dim=0)
         output_all = torch.cat(output_all, dim=0)
 
@@ -63,10 +68,13 @@ def test(dataflow, split, model, device, qiskit=False):
     accuracy = corrects / size
     loss = F.nll_loss(output_all, target_all).item()
 
-    return accuracy, loss
+    if extract_predicted:
+        return accuracy, loss, predicted_all
+    else:
+        return accuracy, loss
 
 
-def test_atks(model, model_name, dataflow, dataset_name):
+def test_atks(model, model_name, dataflow, dataset_name, clean_predicted):
     results_df = []
     for target_model_name in model_names:
         for attack_name in attack_names:
@@ -77,7 +85,7 @@ def test_atks(model, model_name, dataflow, dataset_name):
 
                 atk_path = f'./attack/{dataset_name}/{target_model_name}/{attack_name}/{str(epsilon)}'
 
-                for i in range(len(dataflow['test'])):  # Assuming equal number of images and labels
+                for i in range(len(dataflow['test'])):
                     adv_images = torch.load(f'{atk_path}/adv_images_{i}.pt')
                     labels = torch.load(f'{atk_path}/labels_{i}.pt')
                     all_adv_images.append(adv_images)
@@ -98,13 +106,24 @@ def test_atks(model, model_name, dataflow, dataset_name):
                 accuracy = correct / total
                 f1 = f1_score(all_labels.cpu(), predicted.cpu(), average='weighted')
 
+                # ASR
+                predictions_tensor = torch.cat(clean_predicted, dim=0).to(device)
+                correctly_classified_clean = (predictions_tensor == all_labels)
+                misclassified_adv = (predicted != all_labels)
+                successful_attacks = correctly_classified_clean & misclassified_adv
+
+                num_successful_attacks = successful_attacks.sum().item()
+                num_correct_clean = correctly_classified_clean.sum().item()
+                asr = num_successful_attacks / num_correct_clean if num_correct_clean > 0 else 0
+
                 results_df.append({
                     'Target_Model': target_model_name,
                     'Source_Model': model_name,
                     'Attack': attack_name,
                     'Epsilon': epsilon,
                     'Accuracy': accuracy,
-                    'F1': f1
+                    'F1': f1,
+                    'ASR': asr
                 })
 
     return pd.DataFrame(results_df)

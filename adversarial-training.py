@@ -22,8 +22,6 @@ if not sys.warnoptions:
 
 setSeed()
 
-
-
 # Training each model on their own attack samples
 for dataset, dataset_name in zip(datasets, dataset_names):
     print(f'[📚 DATASET] {dataset_name}')
@@ -106,10 +104,10 @@ for dataset, dataset_name in zip(datasets, dataset_names):
             print(f'\n\t\t[#️⃣ EPOCH {epoch}/{n_epochs}] {val_acc:.3f}')
 
         # Testing
-        test_acc, test_loss = test(dataflow, "test", qfc, device, qiskit=False)
+        test_acc, test_loss, qfc_predicted = test(dataflow, "test", qfc, device, qiskit=False, extract_predicted=True)
         print(f'\t\t[🧪 TEST ACCURACY] {test_acc:.3f}')
 
-        qfc_df = test_atks(qfc, 'QFC', dataflow, dataset_name)
+        qfc_df = test_atks(qfc, 'QFC', dataflow, dataset_name, qfc_predicted)
 
         ###
 
@@ -174,10 +172,10 @@ for dataset, dataset_name in zip(datasets, dataset_names):
             print(f'\n\t\t[#️⃣ EPOCH {epoch}/{n_epochs}] {val_acc:.3f}')
 
         # Testing
-        test_acc, test_loss = test(dataflow, "test", cfc, device, qiskit=False)
+        test_acc, test_loss, cfc_predicted = test(dataflow, "test", cfc, device, qiskit=False, extract_predicted=True)
         print(f'\t\t[🧪 TEST ACCURACY] {test_acc:.3f}')
 
-        cfc_df = test_atks(cfc, 'CFC', dataflow, dataset_name)
+        cfc_df = test_atks(cfc, 'CFC', dataflow, dataset_name, cfc_predicted)
 
         # Concatenate results and save
         results_df = pd.concat([qfc_df, cfc_df], ignore_index=True)
@@ -287,13 +285,13 @@ for dataset, dataset_name in zip(datasets, dataset_names):
             print(f'\t\t[#️⃣ C EPOCH {epoch}/{n_epochs}] {c_val_acc:.3f}')
 
         # Testing
-        q_test_acc, q_test_loss = test(dataflow, "test", qfc, device, qiskit=False)
-        c_test_acc, c_test_loss = test(dataflow, "test", cfc, device, qiskit=False)
+        q_test_acc, q_test_loss, q_predicted = test(dataflow, "test", qfc, device, qiskit=False, extract_predicted=True)
+        c_test_acc, c_test_loss, c_predicted = test(dataflow, "test", cfc, device, qiskit=False, extract_predicted=True)
         print(f'\t\t[🧪 Q TEST ACCURACY] {q_test_acc:.3f}')
         print(f'\t\t[🧪 C TEST ACCURACY] {c_test_acc:.3f}')
 
-        cross_qfc_df = test_atks(qfc, 'QFC', dataflow, dataset_name)
-        cross_cfc_df = test_atks(cfc, 'CFC', dataflow, dataset_name)
+        cross_qfc_df = test_atks(qfc, 'QFC', dataflow, dataset_name, q_predicted)
+        cross_cfc_df = test_atks(cfc, 'CFC', dataflow, dataset_name, c_predicted)
 
         # Concatenate results and save
         cross_results_df = pd.concat([cross_qfc_df, cross_cfc_df], ignore_index=True)

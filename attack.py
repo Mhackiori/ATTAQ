@@ -60,7 +60,7 @@ for dataset, dataset_name in zip(datasets, dataset_names):
             print(f'\t\t[#️⃣ EPOCH {epoch}/{n_epochs}] {val_acc:.3f}')
 
         # Testing
-        test_acc, test_loss = test(dataflow, "test", qfc, device, qiskit=False)
+        test_acc, test_loss, qfc_predicted = test(dataflow, "test", qfc, device, qiskit=False, extract_predicted=True)
         print(f'\t\t[🧪 TEST ACCURACY] {test_acc:.3f}')
 
         ###
@@ -81,7 +81,7 @@ for dataset, dataset_name in zip(datasets, dataset_names):
             print(f'\t\t[#️⃣ EPOCH {epoch}/{n_epochs}] {val_acc:.3f}')
 
         # Testing
-        test_acc, test_loss = test(dataflow, "test", cfc, device, qiskit=False)
+        test_acc, test_loss, cfc_predicted = test(dataflow, "test", cfc, device, qiskit=False, extract_predicted=True)
         print(f'\t\t[🧪 TEST ACCURACY] {test_acc:.3f}')
 
         ###
@@ -196,7 +196,7 @@ for dataset, dataset_name in zip(datasets, dataset_names):
 
                     atk_path = f'./attack/{dataset_name}/{target_model_name}/{attack_name}/{str(epsilon)}'
 
-                    for i in range(len(dataflow['test'])):  # Assuming equal number of images and labels
+                    for i in range(len(dataflow['test'])):
                         adv_images = torch.load(f'{atk_path}/adv_images_{i}.pt')
                         labels = torch.load(f'{atk_path}/labels_{i}.pt')
                         all_adv_images.append(adv_images)
@@ -217,7 +217,18 @@ for dataset, dataset_name in zip(datasets, dataset_names):
                     accuracy = correct / total
                     f1 = f1_score(all_labels.cpu(), predicted.cpu(), average='weighted')
 
-                    print(f'\t[⚔️ QFC VS. {target_model_name} {attack_name} @ {epsilon}] {accuracy:.3f}')
+                    # ASR
+                    qfc_predictions_tensor = torch.cat(qfc_predicted, dim=0).to(device)
+                    correctly_classified_clean = (qfc_predictions_tensor == all_labels)
+                    misclassified_adv = (predicted != all_labels)
+                    successful_attacks = correctly_classified_clean & misclassified_adv
+
+                    num_successful_attacks = successful_attacks.sum().item()
+                    num_correct_clean = correctly_classified_clean.sum().item()
+                    asr = num_successful_attacks / num_correct_clean if num_correct_clean > 0 else 0
+
+
+                    print(f'\t[⚔️ QFC VS. {target_model_name} {attack_name} @ {epsilon}] {accuracy:.3f} | ASR: {asr:.3f}')
 
                     results_df.append({
                         'Target_Model': target_model_name,
@@ -225,7 +236,8 @@ for dataset, dataset_name in zip(datasets, dataset_names):
                         'Attack': attack_name,
                         'Epsilon': epsilon,
                         'Accuracy': accuracy,
-                        'F1': f1
+                        'F1': f1,
+                        'ASR': asr
                     })
 
         print()
@@ -239,7 +251,7 @@ for dataset, dataset_name in zip(datasets, dataset_names):
 
                     atk_path = f'./attack/{dataset_name}/{target_model_name}/{attack_name}/{str(epsilon)}'
 
-                    for i in range(len(dataflow['test'])):  # Assuming equal number of images and labels
+                    for i in range(len(dataflow['test'])): 
                         adv_images = torch.load(f'{atk_path}/adv_images_{i}.pt')
                         labels = torch.load(f'{atk_path}/labels_{i}.pt')
                         all_adv_images.append(adv_images)
@@ -260,7 +272,17 @@ for dataset, dataset_name in zip(datasets, dataset_names):
                     accuracy = correct / total
                     f1 = f1_score(all_labels.cpu(), predicted.cpu(), average='weighted')
 
-                    print(f'\t[⚔️ CFC VS. {target_model_name} {attack_name} @ {epsilon}] {accuracy:.3f}')
+                    # ASR
+                    cfc_predictions_tensor = torch.cat(cfc_predicted, dim=0).to(device)
+                    correctly_classified_clean = (cfc_predictions_tensor == all_labels)
+                    misclassified_adv = (predicted != all_labels)
+                    successful_attacks = correctly_classified_clean & misclassified_adv
+
+                    num_successful_attacks = successful_attacks.sum().item()
+                    num_correct_clean = correctly_classified_clean.sum().item()
+                    asr = num_successful_attacks / num_correct_clean if num_correct_clean > 0 else 0
+
+                    print(f'\t[⚔️ CFC VS. {target_model_name} {attack_name} @ {epsilon}] {accuracy:.3f} | ASR: {asr:.3f}')
 
                     results_df.append({
                         'Target_Model': target_model_name,
@@ -268,7 +290,8 @@ for dataset, dataset_name in zip(datasets, dataset_names):
                         'Attack': attack_name,
                         'Epsilon': epsilon,
                         'Accuracy': accuracy,
-                        'F1': f1
+                        'F1': f1,
+                        'ASR': asr
                     })
 
         results_path = f'./results/{dataset_name}'
